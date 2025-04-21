@@ -1,0 +1,10 @@
+{% extends 'ads/base.html' %}
+{% block title %}Предложение обмена{% endblock %}
+{% block content %}
+<h2>Создать предложение</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+{% endblock %}

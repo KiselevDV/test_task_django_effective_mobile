@@ -1,0 +1,65 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: backend_effective_mobile
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python manage.py collectstatic --noinput &&
+      gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --threads 2 --timeout 30 --preload
+      "
+    volumes:
+      - ..:/app
+    env_file:
+      - ../.env
+    ports:
+      - "18000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    networks:
+      - network_effective_mobile
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres_effective_mobile
+    volumes:
+      - ../../DB/postgres/pg_data_effective_mobile:/var/lib/postgresql/data
+    env_file:
+      - ../.env
+    ports:
+      - "15432:5432"
+    restart: always
+    networks:
+      - network_effective_mobile
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_effective_mobile
+    ports:
+      - "16379:6379"
+    restart: always
+    networks:
+      - network_effective_mobile
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg_data_effective_mobile:
+
+networks:
+  network_effective_mobile:
+    driver: bridge

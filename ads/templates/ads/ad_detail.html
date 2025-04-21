@@ -1,0 +1,20 @@
+{% extends 'ads/base.html' %}
+{% block title %}{{ ad.title }}{% endblock %}
+{% block content %}
+<h2>{{ ad.title }}</h2>
+
+<p>{{ ad.description }}</p>
+<p>Категория: {{ ad.category }}</p>
+<p>Состояние: {{ ad.condition }}</p>
+<p>Дата публикации: {{ ad.created_at|date:"d.m.Y H:i" }}</p>
+{% if ad.image_url %}
+    <img src="{{ ad.image_url }}" alt="Изображение" width="300">
+{% endif %}
+
+{% if user == ad.user %}
+    <p>
+        <a href="{% url 'ads:ad_edit' ad.id %}">Редактировать</a> |
+        <a href="{% url 'ads:ad_delete' ad.id %}">Удалить</a>
+    </p>
+{% endif %}
+{% endblock %}

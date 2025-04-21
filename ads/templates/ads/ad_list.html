@@ -1,0 +1,49 @@
+{% extends 'ads/base.html' %}
+{% block title %}Все объявления{% endblock %}
+{% block content %}
+<h2>Объявления</h2>
+
+<form method="get">
+    <input type="text" name="q" placeholder="Поиск..." value="{{ request.GET.q }}">
+
+    <select name="category">
+        <option value="">Все категории</option>
+        {% for cat in categories %}
+            <option value="{{ cat }}" {% if request.GET.category == cat %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="condition">
+        <option value="">Любое состояние</option>
+        {% for cond in conditions %}
+            <option value="{{ cond }}" {% if request.GET.condition == cond %}selected{% endif %}>{{ cond }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Найти</button>
+</form>
+
+<ul>
+    {% for ad in ads %}
+        <li>
+            <h3><a href="{% url 'ads:ad_detail' ad.id %}">{{ ad.title }}</a></h3>
+            <p>{{ ad.description|truncatewords:20 }}</p>
+            <small>{{ ad.category }} | {{ ad.condition }} | {{ ad.created_at|date:"d.m.Y" }}</small>
+        </li>
+    {% empty %}
+        <li>Нет объявлений.</li>
+    {% endfor %}
+</ul>
+
+<div>
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Назад</a>
+        {% endif %}
+        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Вперёд</a>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

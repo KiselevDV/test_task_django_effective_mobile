@@ -1,0 +1,10 @@
+{% extends 'ads/base.html' %}
+{% block title %}Форма объявления{% endblock %}
+{% block content %}
+<h2>{% if form.instance.pk %}Редактировать{% else %}Создать{% endif %} объявление</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+{% endblock %}
