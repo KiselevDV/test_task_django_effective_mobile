@@ -6,8 +6,8 @@ Django-приложение для размещения объявлений и 
 
 ## Документация
 
-- [Технологии](docs/technologies.md)
-- [Быстрый старт через Docker](docs/quickstart.md)
+- [Стек технологий](docs/technologies.md)
+- [Старт через Docker](docs/quickstart.md)
 - [Команды](docs/commands.md)
 - [API и Swagger](docs/api.md)
 - [Структура проекта](docs/structure.md)

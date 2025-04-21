@@ -38,4 +38,4 @@ pg_data_rocketdata/
 .mypy_cache/
 
 # Env file
-.env
+#.env

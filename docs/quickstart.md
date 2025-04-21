@@ -1,10 +1,10 @@
-# 🚀 Быстрый старт через Docker
+# Быстрый старт через Docker
 
 
 ## 1. Клонируйте репозиторий
 
 ```bash
-git clone https://github.com/your_username/test-task-django-effective-mobile.git
+git clone https://github.com/KiselevDV/test_task_django_effective_mobile.git
 cd test-task-django-effective-mobile
 ```
 
@@ -17,6 +17,7 @@ docker-compose up -d
 ```
 
 Приложение будет доступно на: http://localhost:18000
+
 Админка: http://localhost:18000/admin/
 
 
