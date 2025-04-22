@@ -1,6 +1,7 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 
 from ads.models import Ad, ExchangeProposal
 from ads.api.serializers import AdSerializer, ExchangeProposalSerializer
@@ -13,6 +14,16 @@ class AdViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        if serializer.instance.user != self.request.user:
+            raise PermissionDenied('Нельзя редактировать это объявление')
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            raise PermissionDenied('Нельзя удалить это объявление')
+        instance.delete()
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -34,7 +45,21 @@ class ExchangeProposalViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
+        ad_sender = serializer.validated_data['ad_sender']
+        ad_receiver = serializer.validated_data['ad_receiver']
+        if ad_sender.user == ad_receiver.user:
+            raise PermissionDenied('Нельзя предложить обмен самому себе')
         serializer.save()
+
+    def perform_update(self, serializer):
+        if serializer.instance.ad_sender.user != self.request.user:
+            raise PermissionDenied('Нельзя редактировать это предложение')
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        if instance.ad_sender.user != self.request.user:
+            raise PermissionDenied('Нельзя удалить это предложение')
+        instance.delete()
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -52,6 +77,8 @@ class ExchangeProposalViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def update_status(self, request, pk=None):
         proposal = self.get_object()
+        if proposal.ad_receiver.user != request.user:
+            return Response({'error': 'Нельзя обновлять это предложение'}, status=status.HTTP_403_FORBIDDEN)
         new_status = request.data.get('status')
         if new_status in ['accepted', 'rejected']:
             proposal.status = new_status

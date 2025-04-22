@@ -5,6 +5,7 @@ from ads.models import Ad, ExchangeProposal
 
 class AdSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
+
     class Meta:
         model = Ad
         fields = ['id', 'user', 'title', 'description', 'image_url', 'category', 'condition', 'created_at']

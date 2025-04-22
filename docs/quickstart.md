@@ -24,7 +24,7 @@ docker-compose up -d
 ## 3. Запуск тестов
 
 ```bash
-docker exec -it backend_effective_mobile pytest
+docker exec -it backend_effective_mobile pytest ads/tests.py
 ```
 
 [Назад](../README.md)

@@ -19,7 +19,7 @@ class AdModelTest(TestCase):
         )
 
     def test_str_representation(self):
-        self.assertEqual(str(self.ad), 'Test Ad')
+        self.assertEqual(str(self.ad), 'Test Ad (Новый)')
 
     def test_created_at_is_set(self):
         self.assertIsNotNone(self.ad.created_at)
@@ -106,4 +106,5 @@ class ProposalFormTest(TestCase):
             'comment': 'Same ad'
         })
         self.assertFalse(form.is_valid())
-        self.assertIn('ad_receiver', form.errors)
+        self.assertIn('__all__', form.errors)
+        self.assertIn('Нельзя предложить обмен одного и того же объявления', form.errors['__all__'])
