@@ -18,6 +18,8 @@ docker-compose up -d
 
 Приложение будет доступно на: http://localhost:18000
 
+API: http://localhost:18000/api/
+
 Админка: http://localhost:18000/admin/
 
 
@@ -25,6 +27,13 @@ docker-compose up -d
 
 ```bash
 docker exec -it backend_effective_mobile pytest ads/tests.py
+```
+
+
+## 4. Линт
+
+```bash
+docker exec -it backend_effective_mobile flake8 .
 ```
 
 [Назад](../README.md)

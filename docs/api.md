@@ -1,7 +1,10 @@
-# API и Swagger
+# API
 
-Swagger доступен по адресу: 
+API реализован с использованием Django REST Framework.
 
-[http://localhost:18000/api/docs/](http://localhost:18000/api/docs/)
+Доступные эндпоинты:
+- `GET /api/ads/` — список объявлений
+- `POST /api/ads/` — создать объявление
+- `GET /api/proposals/` — список предложений обмена и т.д.
 
 [Назад](../README.md)
