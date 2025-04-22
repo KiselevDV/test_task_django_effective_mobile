@@ -1,7 +1,9 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic.edit import FormView
 
 from ads.models import Ad, ExchangeProposal
 from ads.forms import AdForm, ProposalForm
@@ -99,7 +101,7 @@ class ProposalCreateView(LoginRequiredMixin, CreateView):
     model = ExchangeProposal
     form_class = ProposalForm
     template_name = 'ads/proposal_form.html'
-    success_url = reverse_lazy('proposal_list')
+    success_url = reverse_lazy('ads:proposal_list')
 
     def form_valid(self, form):
         return super().form_valid(form)
@@ -109,8 +111,18 @@ class ProposalUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = ExchangeProposal
     fields = ['status']
     template_name = 'ads/proposal_status_form.html'
-    success_url = reverse_lazy('proposal_list')
+    success_url = reverse_lazy('ads:proposal_list')
 
     def test_func(self):
         proposal = self.get_object()
         return self.request.user == proposal.ad_receiver.user
+
+
+class SignUpView(FormView):
+    template_name = 'registration/signup.html'
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')  # после регистрации — переход на страницу входа
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)

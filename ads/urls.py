@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import (
+from ads.views import (
     AdListView, AdDetailView, AdCreateView, AdUpdateView, AdDeleteView, ProposalListView, ProposalCreateView,
     ProposalUpdateView
 )

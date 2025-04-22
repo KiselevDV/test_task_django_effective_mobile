@@ -1,0 +1,8 @@
+{% extends "ads/base.html" %}
+
+{% block title %}Выход{% endblock %}
+
+{% block content %}
+<h1 style="color:red;">Вы успешно вышли</h1>
+<p><a href="{% url 'login' %}">Войти снова</a></p>
+{% endblock %}
